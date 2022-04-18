@@ -1,5 +1,5 @@
-SELECT n.id, n.name AS ItemName, '' AS ItemNameInURL, '' AS URL, n.name AS ShortDescription, REPLACE(REPLACE(n.description, CHAR(13), ''), CHAR(10), '') AS FullDescription, 'выставлен' AS Visibility, '' AS Discount, '' AS TegTitle, '' AS MetaTegKeywords, '' AS MetaTegDescription, 
-                  CASE n.categoryId WHEN n.categoryId THEN
+SELECT n.id, n.name AS ItemName, '' AS ItemNameInURL, '' AS URL, n.name AS ShortDescription, REPLACE(REPLACE(n.description, CHAR(13), ''), CHAR(10), '') AS FullDescription, 'выставлен' AS Visibility, '' AS Discount, '' AS TegTitle, 
+                  '' AS MetaTegKeywords, '' AS MetaTegDescription, CASE n.categoryId WHEN n.categoryId THEN
                       (SELECT TOP 1 'Общий каталог/' + cp.categoryName + '/' + cc.categoryName
                        /*+ '/' + nn.categoryName*/ FROM nomenclature nn JOIN
                                          [ItemsCategory] c ON c.CategoryId = nn.categoryId CROSS apply
@@ -11,7 +11,7 @@ SELECT n.id, n.name AS ItemName, '' AS ItemNameInURL, '' AS URL, n.name AS Short
                                               WHERE   a.categoryId = cc.parent_id) cp
                        WHERE   nn.categoryId = n.categoryId) ELSE '' END AS CategoryInSite, uw.name AS WeightCoefficient, 'RUR' AS Currancy, 'Включая НДС: 20.00 %' AS NDS, u.name AS Measure, CAST(p.volume AS nvarchar(10)) 
                   + ' ' + CAST(u.name AS nvarchar(10)) AS Gabarit, isnull(i.concatLinks, i.link) AS ImageURL, y.linkHtml AS [Ссылка на видео], '' AS [ID варианта], n.articulElevel AS VendorCode, b.barcode, '' AS GabaritVariant, 
-                  s.PriceBasic AS [Цена продажи], NULL AS [Старая цена], s.Price AS PriceRetail, s.Stockamount AS Remain, w.unitCount + ' ' + u.name AS Weight, '' AS [Изображения варианта], n.brandName AS Param1, 
+                  s.PriceBasic AS [Цена продажи], NULL AS [Старая цена], PriceRetail = dbo.MarginCalc(s.Price), s.Stockamount AS Remain, w.unitCount AS Weight, '' AS [Изображения варианта], n.brandName AS Param1, 
                   CASE n.categoryId WHEN n.categoryId THEN
                       (SELECT TOP 1 nn.categoryName
                        FROM      nomenclature nn JOIN
