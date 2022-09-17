@@ -10,6 +10,7 @@ GO
 
 
 begin tran
+
 CREATE TABLE [dbo].[nomenclature](
 	[nomenclatureRowId] int IDENTITY(1,1),
 	--[classFilterId] int NULL, -- пока не заполняю
@@ -107,17 +108,37 @@ CREATE TABLE [dbo].[packs](
 [volume][int] NULL
 )
 
+
 CREATE TABLE [dbo].[weight](
-[weightId] UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() PRIMARY KEY,
+[weightId] int IDENTITY(1,1) PRIMARY KEY,
+[nomenclatureId] int NULL,
+[okei] [nvarchar](10) NULL,
+[name] [nvarchar](10) NULL,
+[fullName] [nvarchar](50) NULL,
+[interName] [nvarchar](10) NULL,
 [unitCount] numeric(18,3) NULL,
-[baseUnitCount][int] NULL
+[baseUnitCount][int] NULL,
+[unitCount2] numeric(18,3) NULL,
+[baseUnitCount2][int] NULL,
 )
+
+alter table [dbo].[weight]
+add [baseUnitCount2][int] NULL
+alter table [dbo].[weight]
+alter column [baseUnitCount][int] NULL
+
 
 CREATE TABLE [dbo].[volume](
 	[volumeId] int IDENTITY(1,1) PRIMARY KEY,
+	[nomenclatureId] int NULL,
+	[okei] [nvarchar](10) NULL,
+	[name] [nvarchar](10) NULL,
+	[fullName] [nvarchar](50) NULL,
+	[interName] [nvarchar](10) NULL,
 	[baseUnitCount] [int] NULL,
 	[unitCount] [int] NULL
 	);
+
 
 CREATE TABLE [dbo].[barcode](
 	[barcodeId] int IDENTITY(1,1) PRIMARY KEY,
@@ -181,7 +202,8 @@ CREATE TABLE [dbo].[StockOfGoods](
 	[ShippingDate] [nvarchar](max) NULL,
 	[Identificator] [nvarchar](max) NULL,
 	[idCategoria] [nvarchar](max) NULL,
-	[NameCategoria] [nvarchar](max) NULL)
+	[NameCategoria] [nvarchar](max) NULL,
+	[IdLoad] [int] NOT NULL)
 
 
 
@@ -355,4 +377,13 @@ id nvarchar (10)
 
 
 --commit
+
+
+create table OzonTypesAttr (
+id int primary key,
+name_attr nvarchar(200)
+)
+
+
+
 rollback
